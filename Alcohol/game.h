@@ -2,15 +2,6 @@
 
 #include <iostream>
 #include <cstdlib>
-//здесь проверяем, Windows ли это
-//и подключаем необходимую библиотеку для sleep()
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-#include <windows.h>
-#else
-#include <unistd.h>
-#endif
-
-#include <stdlib.h>
 
 
 class GameObject {
@@ -22,7 +13,8 @@ protected:
 
 public:
 	virtual void step() = 0; //TODO: с виртуальными ф-иями надо будет разобраться.
-	virtual char view() = 0;
+	virtual char view() = 0; //так мы указываем, что это будет чистая виртуальня ф-ия,
+							 //она должна иметь реализацию в наследуемых классах
 };
 
 //наш уставший алкоголик
