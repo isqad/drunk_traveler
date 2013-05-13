@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include "game.h"
 
 using namespace std;
@@ -13,11 +15,14 @@ int main() {
 
 	cout << "Hello, world!\n";
 
+	//Сеем зерно для функции rand()
+	srand(time(NULL));
+
 	Game game;
 
-	Walker x;
+	Walker* x = new Walker();
 
-	game.addGameObject(&x);
+	game.addGameObject(x);
 
 	game.cycle();
 
