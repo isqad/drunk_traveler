@@ -2,22 +2,28 @@
 
 class GameObject {
 public:
+	virtual void step(); //TODO: СЃ РІРёСЂС‚СѓР°Р»СЊРЅС‹РјРё С„-РёСЏРјРё РЅР°РґРѕ Р±СѓРґРµС‚ СЂР°Р·РѕР±СЂР°С‚СЊСЃСЏ.
+};
+
+//РЅР°С€ СѓСЃС‚Р°РІС€РёР№ Р°Р»РєРѕРіРѕР»РёРє
+class Walker: public GameObject {
+private:
+	enum direction { NORTH, SOUTH, EAST, WEST };
+	unsigned int sleep;
+public:
+	Walker(): sleep(0) {};
 	void step();
 };
 
-//наш уставший алкоголик
-class Walker: public GameObject {};
-
 class Game {
 private:
-	static const int MAX_GAME_OBJECTS = 3; //так инициализируем константу, которая принадлежит классу
-	unsigned int _count_objects; //счетчик игровых объектов
-	GameObject* _objects[MAX_GAME_OBJECTS]; //содержит указатели на игровые объекты
+	static const int MAX_GAME_OBJECTS = 3; //С‚Р°Рє РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµРј РєРѕРЅСЃС‚Р°РЅС‚Сѓ, РєРѕС‚РѕСЂР°СЏ РїСЂРёРЅР°РґР»РµР¶РёС‚ РєР»Р°СЃСЃСѓ
+	unsigned int _count_objects; //СЃС‡РµС‚С‡РёРє РёРіСЂРѕРІС‹С… РѕР±СЉРµРєС‚РѕРІ
+	GameObject* _objects[MAX_GAME_OBJECTS]; //СЃРѕРґРµСЂР¶РёС‚ СѓРєР°Р·Р°С‚РµР»Рё РЅР° РёРіСЂРѕРІС‹Рµ РѕР±СЉРµРєС‚С‹
 	
 public:
-	Game(): _count_objects(0), _objects() {
-	};
-	void addGameObject(GameObject*); //аргумент - указатель на объект
-	void removeGameObject(GameObject*); //аргумент - указатель на объект
+	Game(): _count_objects(0), _objects() {}; //Р’ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂРµ РјС‹ С‚Р°РєР¶Рµ РѕР±РЅСѓР»СЏРµРј РјР°СЃСЃРёРІ РѕР±СЉРµРєС‚РѕРІ
+	void addGameObject(GameObject*); //Р°СЂРіСѓРјРµРЅС‚ - СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕР±СЉРµРєС‚
+	void removeGameObject(GameObject*); //Р°СЂРіСѓРјРµРЅС‚ - СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РѕР±СЉРµРєС‚
 	void cycle();
 };

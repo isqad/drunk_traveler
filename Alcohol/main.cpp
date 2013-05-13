@@ -3,7 +3,7 @@
 
 using namespace std;
 
-//размеры поля
+//СЂР°Р·РјРµСЂС‹ РїРѕР»СЏ
 const int SQUARE_WIDTH = 15;
 const int SQUARE_HEIGHT = 15;
 

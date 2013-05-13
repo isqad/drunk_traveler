@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include "game.h"
 
 using namespace std;
@@ -7,9 +9,23 @@ void GameObject::step() {
 	cout << "Object has step\n";
 }
 
+void Walker::step() {
+	GameObject::step();
+	//Ð²Ñ‹Ð±Ð¸Ñ€Ð°ÐµÐ¼ Ð½Ð°Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ
+	unsigned int d = rand() % 4;
+
+	switch(d) {
+		case NORTH: cout << "north\n"; break;
+		case SOUTH: cout << "south\n"; break;
+		case WEST: cout << "west\n"; break;
+		default: cout << "east\n";
+	};
+
+};
+
 void Game::addGameObject(GameObject* obj) {
 	if (_count_objects < MAX_GAME_OBJECTS) {
-		//ïðîâåðêà íà óíèêàëüíîñòü
+		//Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð½Ð° ÑƒÐ½Ð¸ÐºÐ°Ð»ÑŒÐ½Ð¾ÑÑ‚ÑŒ
 		if (_count_objects > 0) {
 			for (unsigned int i = 0; i < MAX_GAME_OBJECTS; i++) {
 				if (_objects[i] == obj) {
@@ -17,14 +33,14 @@ void Game::addGameObject(GameObject* obj) {
 				}
 			}
 		}
-		//ñíà÷àëà ïðèñâàèâàåì â ýëåìåíò ìàññèâà îáúåêò, çàòåì ñ÷åò÷èê óâåëè÷èâàåì
+		//ÑÐ½Ð°Ñ‡Ð°Ð»Ð° Ð¿Ñ€Ð¸ÑÐ²Ð°Ð¸Ð²Ð°ÐµÐ¼ Ð² ÑÐ»ÐµÐ¼ÐµÐ½Ñ‚ Ð¼Ð°ÑÑÐ¸Ð²Ð° Ð¾Ð±ÑŠÐµÐºÑ‚, Ð·Ð°Ñ‚ÐµÐ¼ ÑÑ‡ÐµÑ‚Ñ‡Ð¸Ðº ÑƒÐ²ÐµÐ»Ð¸Ñ‡Ð¸Ð²Ð°ÐµÐ¼
 		_objects[_count_objects++] = obj;
 		
 		cout << "Added object #" << _count_objects << ", " << obj << "\n";
 	}
 };
 
-//ïðèäåòñÿ âîñïîëüçîâàòüñÿ óêàçàòåëÿìè
+//Ð¿Ñ€Ð¸Ð´ÐµÑ‚ÑÑ Ð²Ð¾ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÑŒÑÑ ÑƒÐºÐ°Ð·Ð°Ñ‚ÐµÐ»ÑÐ¼Ð¸
 void Game::removeGameObject(GameObject* obj) {
 	if (_count_objects > 0) {
 		for (unsigned int i = 0; i < MAX_GAME_OBJECTS; i++) {
@@ -38,15 +54,17 @@ void Game::removeGameObject(GameObject* obj) {
 	}
 };
 
-//ïðîáåãàåìñÿ ïî âñåì èãðîâûì îáúåêòàì
+//Ð¿Ñ€Ð¾Ð±ÐµÐ³Ð°ÐµÐ¼ÑÑ Ð¿Ð¾ Ð²ÑÐµÐ¼ Ð¸Ð³Ñ€Ð¾Ð²Ñ‹Ð¼ Ð¾Ð±ÑŠÐµÐºÑ‚Ð°Ð¼
 void Game::cycle() {
 	cout << "Cycle is run\n";
 
+	//Ð¡ÐµÐµÐ¼ Ð·ÐµÑ€Ð½Ð¾ Ð´Ð»Ñ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ð¸ rand()
+	srand(time(NULL));
+
 	if (_count_objects > 0) {
 		for (unsigned int i = 0; i < MAX_GAME_OBJECTS; i++) {
-			if (_objects[i] != 0) {
-				GameObject obj = *_objects[i];
-				obj.step();
+			if (_objects[i] != NULL) {
+				_objects[i]->step();
 			}
 		}
 	}
