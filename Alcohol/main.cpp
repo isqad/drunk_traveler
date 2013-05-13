@@ -1,13 +1,7 @@
-#include <iostream>
-#include <cstdlib>
 #include <ctime>
 #include "game.h"
 
 using namespace std;
-
-//размеры поля
-const int SQUARE_WIDTH = 15;
-const int SQUARE_HEIGHT = 15;
 
 int main() {
 	
@@ -20,13 +14,25 @@ int main() {
 
 	Game game;
 
-	Walker* x = new Walker();
+	Walker* w = new Walker();
+	//Walker w;
+	Tavern* t = new Tavern();
+	Column* c = new Column();
 
-	game.addGameObject(x);
+	game.addGameObject(w);
+	game.addGameObject(t);
+	game.addGameObject(c);
 
-	game.cycle();
+	for (unsigned int i = 0; i < 200; i++) {
+		game.cycle();	
+	}
+	
 
 	cin >> a;
+
+	delete w;
+	delete t;
+	delete c;
 
 	return 0;
 }

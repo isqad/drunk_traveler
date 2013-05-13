@@ -1,23 +1,42 @@
-#include <iostream>
-#include <cstdlib>
 #include "game.h"
-
-void GameObject::step() {
-	std::cout << "Object has step\n";
-}
+#include <chrono>
+#include <thread>
 
 void Walker::step() {
-	GameObject::step();
+	
 	//выбираем направление
 	unsigned int d = rand() % 4;
 
 	switch(d) {
-		case NORTH: std::cout << "north\n"; break;
-		case SOUTH: std::cout << "south\n"; break;
-		case WEST: std::cout << "west\n"; break;
-		default: std::cout << "east\n";
+		case NORTH: 
+			_pY > 0 ? _pY-- : _pY++;
+		break;
+		case SOUTH: 
+			_pY < Game::SQUARE_HEIGHT ? _pY++ : _pY--; 
+		break;
+		case WEST:
+			_pX > 0 ? _pX-- : _pX++;
+		break;
+		default: _pX < Game::SQUARE_WIDTH ? _pX++ : _pX--;
 	};
 
+	std::cout << "X: " << _pX << ", Y: " << _pY << '\n';
+
+};
+
+char Walker::view() {
+	return _view;
+};
+
+void Column::step() {};
+void Tavern::step() {};
+
+char Column::view() {
+	return _view;
+};
+
+char Tavern::view() {
+	return _view;
 };
 
 void Game::addGameObject(GameObject* obj) {
@@ -33,7 +52,7 @@ void Game::addGameObject(GameObject* obj) {
 		//сначала присваиваем в элемент массива объект, затем счетчик увеличиваем
 		_objects[_count_objects++] = obj;
 		
-		std::cout << "Added object #" << _count_objects << ", " << obj << "\n";
+		std::cout << "Added object #" << _count_objects << ", " << obj << '\n';
 	}
 };
 
@@ -61,5 +80,36 @@ void Game::cycle() {
 				_objects[i]->step();
 			}
 		}
+
+		for (int i = 0; i < SQUARE_WIDTH; i++) {
+			for (int j = 0; j < SQUARE_HEIGHT; j++) {
+				_buffer[i][j] = '.';
+			}
+		}
+
+		Game::render();
+
+		std::cout << std::flush;
+
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+
+		#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+			system("cls");
+		#else
+			system("clear");
+		#endif
+
 	}
+};
+
+void Game::render() {
+	if (_count_objects > 0) {
+		for (int i = 0; i < SQUARE_WIDTH; i++) {
+			for (int j = 0; j < SQUARE_HEIGHT; j++) {
+				std::cout << _buffer[i][j];
+			}
+			std::cout << '\n';
+		}
+		
+	}	
 };
