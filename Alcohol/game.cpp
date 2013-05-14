@@ -23,7 +23,7 @@ void Column::collision(GameObject* obj) {};
 void Walker::step() {
 	
 	//Если не спим
-	if (_sleep-- > 0) {
+	if (_sleep == 0) {
 		//выбираем направление
 		unsigned int d = rand() % 4;
 
@@ -39,6 +39,8 @@ void Walker::step() {
 			break;
 			default: _pX < Game::SQUARE_WIDTH - 1 ? _pX++ : _pX--;
 		};	
+	} else {
+		_sleep--;
 	}
 	
 
