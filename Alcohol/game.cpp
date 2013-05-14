@@ -49,11 +49,9 @@ void Walker::step() {
 void Walker::collision(GameObject* obj) {
 	char objType = obj->view();
 
-	if (objType == 'C' && _sleep == 0) {
-		_sleep = 5;
-	} else if (_sleep > 0) {
-		_sleep--;
-	}
+	switch(objType) {
+		case 'C': _sleep == 0 ? _sleep = 5 : _sleep--; break;
+	};
 };
 
 void Game::addGameObject(GameObject* obj) {
@@ -78,7 +76,7 @@ void Game::removeGameObject(GameObject* obj) {
 			if (_objects[i] == obj) {
 				_objects[i] = 0;
 				_count_objects--;
-				break;
+				return;
 			}
 		}
 	}
