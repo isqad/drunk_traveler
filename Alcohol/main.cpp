@@ -7,15 +7,12 @@ int main() {
 	
 	int a;
 
-	cout << "Hello, world!\n";
-
 	//Сеем зерно для функции rand()
 	srand(time(NULL));
 
 	Game game;
 
 	Walker* w = new Walker();
-	//Walker w;
 	Tavern* t = new Tavern();
 	Column* c = new Column();
 
@@ -23,11 +20,14 @@ int main() {
 	game.addGameObject(t);
 	game.addGameObject(c);
 
+	game.clr_console();
+
 	for (unsigned int i = 0; i < 200; i++) {
 		game.cycle();	
 	}
 	
-
+	cout << "End game\n";
+	cout << "Enter any number for exit: ";
 	cin >> a;
 
 	delete w;

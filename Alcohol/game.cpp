@@ -16,26 +16,42 @@ void Column::step() {};
 
 void Tavern::step() {};
 
+void Tavern::collision(GameObject* obj) {};
+
+void Column::collision(GameObject* obj) {};
+
 void Walker::step() {
 	
-	//выбираем направление
-	unsigned int d = rand() % 4;
+	//Если не спим
+	if (_sleep-- > 0) {
+		//выбираем направление
+		unsigned int d = rand() % 4;
 
-	switch(d) {
-		case NORTH: 
-			_pY > 0 ? _pY-- : _pY++;
-		break;
-		case SOUTH: 
-			_pY < Game::SQUARE_HEIGHT ? _pY++ : _pY--; 
-		break;
-		case WEST:
-			_pX > 0 ? _pX-- : _pX++;
-		break;
-		default: _pX < Game::SQUARE_WIDTH ? _pX++ : _pX--;
+		switch(d) {
+			case NORTH: 
+				_pY > 0 ? _pY-- : _pY++;
+			break;
+			case SOUTH: 
+				_pY < Game::SQUARE_HEIGHT - 1  ? _pY++ : _pY--; 
+			break;
+			case WEST:
+				_pX > 0 ? _pX-- : _pX++;
+			break;
+			default: _pX < Game::SQUARE_WIDTH - 1 ? _pX++ : _pX--;
+		};	
+	}
+	
+
+	//std::cout << "X: " << _pX << ", Y: " << _pY << '\n';
+
+};
+
+void Walker::collision(GameObject* obj) {
+	char objType = obj->view();
+
+	switch(objType) {
+		case 'C': _sleep = 5; //засыпаем на 5 ходов
 	};
-
-	std::cout << "X: " << _pX << ", Y: " << _pY << '\n';
-
 };
 
 void Game::addGameObject(GameObject* obj) {
@@ -68,7 +84,8 @@ void Game::removeGameObject(GameObject* obj) {
 
 //пробегаемся по всем игровым объектам
 void Game::cycle() {
-	std::cout << "Cycle is run\n";
+	//std::cout << "Game is run\n";
+	std::cout << "Step # " << ++_game_counter << '\n';
 
 	if (_count_objects > 0) {
 
@@ -89,29 +106,45 @@ void Game::cycle() {
 			}
 		}
 
-		Game::render();
+		_checkCollisions();
+
+		_render();
 
 		std::cout << std::flush;
 
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 
-		#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-			system("cls");
-		#else
-			system("clear");
-		#endif
+		clr_console();
 
 	}
 };
 
-void Game::render() {
-	if (_count_objects > 0) {
-		for (int i = 0; i < SQUARE_WIDTH; i++) {
-			for (int j = 0; j < SQUARE_HEIGHT; j++) {
-				std::cout << _buffer[i][j];
-			}
-			std::cout << '\n';
+void Game::_render() {
+	for (int i = 0; i < SQUARE_WIDTH; i++) {
+		for (int j = 0; j < SQUARE_HEIGHT; j++) {
+			std::cout << _buffer[i][j];
 		}
-		
+		std::cout << '\n';
 	}	
+};
+
+void Game::_checkCollisions() {
+	for (unsigned int i = 0; i < MAX_GAME_OBJECTS; i++) {
+		if (_objects[i] != NULL) {
+			for (unsigned int j = i + 1; j < MAX_GAME_OBJECTS; j++ ) {
+				if (_objects[j] != NULL && _objects[j]->x() == _objects[i]->x() && _objects[j]->y() == _objects[i]->y()) {
+					_objects[i]->collision(_objects[j]); //столкновение i с j
+					_objects[j]->collision(_objects[i]); //столкновение j c i	
+				}
+			}
+		}
+	}
+};
+
+void Game::clr_console() const {
+	#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+		system("cls");
+	#else
+		system("clear");
+	#endif
 };
