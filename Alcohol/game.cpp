@@ -1,6 +1,20 @@
 #include "game.h"
-#include <chrono>
-#include <thread>
+
+inline int GameObject::x() const {
+	return _pX;
+};
+
+inline int GameObject::y() const {
+	return _pY;
+};
+
+inline char GameObject::view() const {
+	return _view;
+};
+
+void Column::step() {};
+
+void Tavern::step() {};
 
 void Walker::step() {
 	
@@ -24,21 +38,6 @@ void Walker::step() {
 
 };
 
-char Walker::view() {
-	return _view;
-};
-
-void Column::step() {};
-void Tavern::step() {};
-
-char Column::view() {
-	return _view;
-};
-
-char Tavern::view() {
-	return _view;
-};
-
 void Game::addGameObject(GameObject* obj) {
 	if (_count_objects < MAX_GAME_OBJECTS) {
 		//проверка на уникальность
@@ -51,8 +50,6 @@ void Game::addGameObject(GameObject* obj) {
 		}
 		//сначала присваиваем в элемент массива объект, затем счетчик увеличиваем
 		_objects[_count_objects++] = obj;
-		
-		std::cout << "Added object #" << _count_objects << ", " << obj << '\n';
 	}
 };
 
@@ -63,7 +60,6 @@ void Game::removeGameObject(GameObject* obj) {
 			if (_objects[i] == obj) {
 				_objects[i] = 0;
 				_count_objects--;
-				std::cout << "Removed object #" << (i + 1) << "\n";
 				break;
 			}
 		}
@@ -75,15 +71,21 @@ void Game::cycle() {
 	std::cout << "Cycle is run\n";
 
 	if (_count_objects > 0) {
-		for (unsigned int i = 0; i < MAX_GAME_OBJECTS; i++) {
-			if (_objects[i] != NULL) {
-				_objects[i]->step();
-			}
-		}
 
 		for (int i = 0; i < SQUARE_WIDTH; i++) {
 			for (int j = 0; j < SQUARE_HEIGHT; j++) {
 				_buffer[i][j] = '.';
+			}
+		}
+
+		for (unsigned int i = 0; i < MAX_GAME_OBJECTS; i++) {
+			if (_objects[i] != NULL) {
+				_objects[i]->step();
+
+				int objX = _objects[i]->x();
+				int objY = _objects[i]->y();
+
+				_buffer[objX][objY] = _objects[i]->view();
 			}
 		}
 

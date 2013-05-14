@@ -2,7 +2,8 @@
 
 #include <iostream>
 #include <cstdlib>
-
+#include <chrono>
+#include <thread>
 
 class GameObject {
 protected:
@@ -13,8 +14,11 @@ protected:
 
 public:
 	virtual void step() = 0; //TODO: с виртуальными ф-иями надо будет разобраться.
-	virtual char view() = 0; //так мы указываем, что это будет чистая виртуальня ф-ия,
+							 //так мы указываем, что это будет чистая виртуальня ф-ия,
 							 //она должна иметь реализацию в наследуемых классах
+	inline int x() const;
+	inline int y() const;
+	inline char view() const;
 };
 
 //наш уставший алкоголик
@@ -25,23 +29,20 @@ private:
 public:
 	Walker(): _sleep(0), GameObject(0, 0, 'D') {};
 	void step() override;
-	char view() override;
 };
 
 //столб
 class Column: public GameObject {
 public:
 	Column(): GameObject(7, 7, 'C') {};
-	void step() override;
-	char view() override; 
+	void step() override; 
 };
 
 //трактир
 class Tavern: public GameObject {
 public:
-	Tavern(): GameObject(-1, -1, 'T') {};
+	Tavern(): GameObject(0, 0, 'T') {};
 	void step() override;
-	char view() override;
 };
 
 class Game {
