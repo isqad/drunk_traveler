@@ -38,7 +38,7 @@ class Column: public GameObject {
 public:
 	Column(): GameObject(7, 7, 'C') {};
 	void step() override;
-	void collision(GameObject*) override; 
+	void collision(GameObject*) override;
 };
 
 //трактир

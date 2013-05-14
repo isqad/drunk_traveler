@@ -16,9 +16,9 @@ int main() {
 	Tavern* t = new Tavern();
 	Column* c = new Column();
 
-	game.addGameObject(w);
-	game.addGameObject(t);
 	game.addGameObject(c);
+	game.addGameObject(t);
+	game.addGameObject(w);
 
 	game.clr_console();
 

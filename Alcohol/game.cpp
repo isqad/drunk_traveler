@@ -16,6 +16,7 @@ void Column::step() {};
 
 void Tavern::step() {};
 
+
 void Tavern::collision(GameObject* obj) {};
 
 void Column::collision(GameObject* obj) {};
@@ -39,21 +40,20 @@ void Walker::step() {
 			break;
 			default: _pX < Game::SQUARE_WIDTH - 1 ? _pX++ : _pX--;
 		};	
-	} else {
-		_sleep--;
-	}
-	
+	}	
 
-	//std::cout << "X: " << _pX << ", Y: " << _pY << '\n';
+	//std::cout << "X: " << _pX << ", Y: " << _pY << ", sleep: " << _sleep << '\n';
 
 };
 
 void Walker::collision(GameObject* obj) {
 	char objType = obj->view();
 
-	switch(objType) {
-		case 'C': _sleep = 5; //засыпаем на 5 ходов
-	};
+	if (objType == 'C' && _sleep == 0) {
+		_sleep = 5;
+	} else if (_sleep > 0) {
+		_sleep--;
+	}
 };
 
 void Game::addGameObject(GameObject* obj) {
@@ -107,6 +107,8 @@ void Game::cycle() {
 				_buffer[objX][objY] = _objects[i]->view();
 			}
 		}
+
+
 
 		_checkCollisions();
 
